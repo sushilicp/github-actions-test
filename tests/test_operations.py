@@ -12,4 +12,4 @@ def test_subtract():
 
 
 def test_multiple():
-    assert multiple(4,5) == 20
+    assert multiple(4, 5) == 20
