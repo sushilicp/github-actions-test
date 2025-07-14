@@ -37,3 +37,12 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.sources=.
+      # Google Chat notification step added below
+      - name: Send Google Chat notification
+        if: always()  # Send notification whether job succeeds or fails
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{
+            "text": "CI Pipeline Status: ${{ job.status }}\nRepository: ${{ github.repository }}\nEvent: ${{ github.event_name }}\nTriggered by: ${{ github.actor }}\nWorkflow: ${{ github.workflow }}\nCommit: ${{ github.sha }}\nView run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }' \
+          "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}"
